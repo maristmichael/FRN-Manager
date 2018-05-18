@@ -1,0 +1,117 @@
+#:kivy 1.10.0
+ScreenManager:
+    HomeScreen:
+    DirScreen:
+    RosterScreen:
+
+
+<HomeScreen>:
+    name: '_HomeScreen_'
+    id: _HomeScreen_
+    BoxLayout:
+        orientation: 'vertical'
+
+        Image:
+            source: 'frn.png'
+            #keep_ratio: False
+            allow_stretch: True
+            opacity: 0.8
+            size_hint: (1,0.5)
+            #
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.75}
+        BoxLayout:
+            size_hint: (1,.165)
+            orientation: 'horizontal'
+
+            # Build Roster
+            Button:
+                background_color: .1,1,.1,1
+                font_size: 40
+                text: "Build Roster"
+                color: 1,1,1,1
+                on_release: _HomeScreen_.screen_switch_dirScreen()
+
+            # Open
+            Button:
+                background_color: .1,1,.1,1
+                font_size: 40
+                text: "open"
+                color: 1,1,1,1
+        BoxLayout:
+            size_hint: (1, .165)
+            orientation: 'horizontal'
+            Button:
+                background_color: .1,1,.1,1
+                font_size: 40
+                text: "open"
+                color: 1,1,1,1
+                on_release: _HomeScreen_.test()
+            Button:
+                background_color: .1,1,.1,1
+                font_size: 40
+                text: "open"
+                color: 1,1,1,1
+        BoxLayout:
+            size_hint: (1, .17)
+            orientation: 'horizontal'
+            Button:
+                background_color: .1, 1, .1, 1
+                font_size: 40
+                text: "open"
+                color: 1,1,1,1
+                on_release: _HomeScreen_.test()
+            Button:
+                #background_normal: ''
+                background_color: 1,.1,.1,1
+                font_size: 40
+                text: "EXIT"
+                color: 1,1,1,1
+                on_release: root.close()
+
+
+<DirScreen>:
+    name: '_DirScreen_'
+    id: _DirScreen_
+    BoxLayout:
+        orientation: 'vertical'
+        FileChooserListView:
+            id: filechooser
+            size_hint: (1, .9)
+            rootpath: _DirScreen_.home
+            filters: ["*.csv"]
+            #on_selection: _DirScreen_.selected(filechooser.selection)
+            on_submit: _DirScreen_.screen_switch_RostScreen(filechooser.path, filechooser.selection)
+        BoxLayout:
+            background_normal: ''
+            background_color: 1, 1, 1, 1
+            padding: 10
+            size_hint: (1, .1)
+            Button:
+                size_hint: (.5, 1)
+                text: "back"
+                on_release: _DirScreen_.screen_switch_previous()
+            Button:
+                size_hint: (.5, 1)
+                text: "open"
+                on_release: _DirScreen_.screen_switch_RostScreen()
+<RosterScreen>:
+    name: '_RosterScreen_'
+    id: _RosterScreen_
+    on_enter: _RosterScreen_.build_roster(filechooser.path, filechooser.selection)
+    ScrollView:
+        size_hint: None, None
+        size: 1000, 640
+        pos_hint: {'center_x': .5, 'center_y': .5}
+
+        GridLayout:
+            id: roster
+            cols: 1
+            padding: 10
+            spacing: 10
+            height: self.minimum_height
+            size_hint: None, None
+            do_scroll_x: False
+
+<ScrollButton>:
+    size_hint: None, None
+    size: 960, 80
